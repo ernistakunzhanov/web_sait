@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web_sait/view/home_view.dart';
 import 'package:web_sait/view/login_view.dart';
+import 'package:web_sait/view/student_register_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginView(),
+      home: const HomeView(),
     );
   }
 }

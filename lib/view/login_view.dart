@@ -1,5 +1,13 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:web_sait/api/apis.dart';
+import 'package:web_sait/view/home_view.dart';
 import 'package:web_sait/widgets/app_bar_widget.dart';
+import 'package:web_sait/widgets/dialogs.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -9,6 +17,41 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  _handleGoogleBtnClick() {
+    Dialogs.showProgressBar(context);
+    _signInWithGoogle().then((user) {
+      Navigator.pop(context);
+      if (user != null) {
+        log('\User :${user.user}');
+        log('\UserAdditionalInfo :${user.additionalUserInfo}');
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => HomeView()));
+      }
+    });
+  }
+
+  Future<UserCredential?> _signInWithGoogle() async {
+    try {
+      await InternetAddress.lookup('google.com');
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      return await ApiS.auth.signInWithCredential(credential);
+    } catch (e) {
+      log('\n_signInWithGoogle: $e');
+      Dialogs.showSnackBar(context, 'Somethihg Went wrong (Check Internet!)');
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,7 +191,9 @@ class _LoginViewState extends State<LoginView> {
                             ),
                           ),
                           ElevatedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              _handleGoogleBtnClick();
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xffffffff),
                               fixedSize: const Size(356, 44),
@@ -348,6 +393,7 @@ class _LoginViewState extends State<LoginView> {
                                 ),
                               ),
                             ),
+                            
                           ],
                         ),
                       ],

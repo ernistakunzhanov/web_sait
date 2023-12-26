@@ -11,7 +11,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  String currentLang = language[0];
+  int? groupValue = -1;
   bool? checkBox1 = false;
   bool? checkBox2 = false;
 
@@ -45,18 +45,18 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                   const SizedBox(height: 63),
-                  const DefaultTabController(
+                  DefaultTabController(
                     length: 4,
                     child: TabBar(
                       labelColor: Color(0xff4224DB),
                       labelStyle: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 24,
+                        fontSize: MediaQuery.of(context).size.height * .02,
                       ),
                       unselectedLabelColor: Color(0xff000000),
                       unselectedLabelStyle: TextStyle(
                         fontWeight: FontWeight.w400,
-                        fontSize: 24,
+                        fontSize: MediaQuery.of(context).size.width * .015,
                       ),
                       indicatorColor: Color(0xff4224DB),
                       dividerColor: Color(0xffA4A4A4),
@@ -74,23 +74,35 @@ class _HomeViewState extends State<HomeView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: 393,
+                        width: MediaQuery.of(context).size.width * 0.18,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              width: 393,
+                              // width: 393,
                               height: 50.41,
                               child: TextField(
+                                textAlignVertical: TextAlignVertical.center,
                                 decoration: InputDecoration(
+                                  isCollapsed: true,
                                   fillColor: const Color(0xff000000),
                                   prefixIcon: Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 15),
+                                      horizontal: 15,
+                                    ),
                                     child: SvgPicture.asset(
-                                        'assets/icons/search-grey.svg'),
+                                      'assets/icons/search-grey.svg',
+                                      // icon responsive
+                                      width: MediaQuery.of(context).size.width *
+                                          .015,
+                                    ),
                                   ),
                                   hintText: 'Курстун аты',
+                                  hintStyle: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            .015,
+                                  ),
                                   border: const OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0xff000000),
@@ -128,12 +140,11 @@ class _HomeViewState extends State<HomeView> {
                                   ),
                                   leading: Radio(
                                       activeColor: const Color(0xff4224DB),
-                                      value: language[0],
-                                      groupValue: currentLang,
+                                      value: 0,
+                                      groupValue: groupValue,
                                       onChanged: (value) {
-                                        setState(() {
-                                          currentLang = value.toString();
-                                        });
+                                        setState(() {});
+                                        groupValue = value;
                                       }),
                                 ),
                               ],
@@ -149,11 +160,11 @@ class _HomeViewState extends State<HomeView> {
                               ),
                               leading: Radio(
                                   activeColor: const Color(0xff4224DB),
-                                  value: language[1],
-                                  groupValue: currentLang,
+                                  value: 1,
+                                  groupValue: groupValue,
                                   onChanged: (value) {
                                     setState(() {
-                                      currentLang = value.toString();
+                                      groupValue = value;
                                     });
                                   }),
                             ),
@@ -168,11 +179,11 @@ class _HomeViewState extends State<HomeView> {
                               ),
                               leading: Radio(
                                   activeColor: const Color(0xff4224DB),
-                                  value: language[2],
-                                  groupValue: currentLang,
+                                  value: 2,
+                                  groupValue: groupValue,
                                   onChanged: (value) {
                                     setState(() {
-                                      currentLang = value.toString();
+                                      groupValue = value;
                                     });
                                   }),
                             ),
@@ -432,5 +443,3 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 }
-
-List<String> language = ['Кыргыз тилде', 'Орус тилде', 'Каалаган тилде'];
